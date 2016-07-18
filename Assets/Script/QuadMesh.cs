@@ -2,7 +2,7 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class TriangleMesh : MonoBehaviour {
+public class QuadMesh : MonoBehaviour {
 
 	[SerializeField]
 	private Material _mat;
@@ -10,34 +10,34 @@ public class TriangleMesh : MonoBehaviour {
 	private void Start () {
 		Mesh mesh = new Mesh ();
 		mesh.vertices = new Vector3[] {
-			new Vector3 (0.0f, 1.0f),
-			new Vector3 (1.0f, -1.0f),
-			new Vector3 (-1.0f, -1.0f),
+			new Vector3 (-2.0f, 0.0f, 2.0f),
+			new Vector3 (-2.0f, 0.0f, -2.0f),
+			new Vector3 (2.0f, 0.0f, -2.0f),
+			new Vector3 (2.0f, 0.0f, 2.0f),
 		};
 
-
-		//時計回りに頂点を結んだ面が前面(法線の向き)左手座標系
+		//三角形のインデックスは3頂点ごとに指定
 		mesh.triangles = new int[] {
-			0, 1, 2
+			2, 1, 0, 0, 3, 2
 		};
 
-		//各頂点に対してuv座標を設定
 		mesh.uv = new Vector2[] {
-			new Vector2 (0.5f, 1.0f),
-			new Vector2 (1.0f, 0.0f),
+			new Vector2 (0.0f, 1.0f),
 			new Vector2 (0.0f, 0.0f),
+			new Vector2 (1.0f, 0.0f),
+			new Vector2 (1.0f, 1.0f),
 		};
 
 		mesh.colors = new Color[] {
-			Color.blue,
 			Color.red,
+			Color.blue,
 			Color.green,
+			Color.yellow,
 		};
 
 		var filter = GetComponent<MeshFilter> ();
 		filter.sharedMesh = mesh;
-		filter.sharedMesh.name = "OriginalTriangle";
-
+		filter.sharedMesh.name = "OriginalQuad";
 	}
 	
 	public void OnWillRenderObject()
