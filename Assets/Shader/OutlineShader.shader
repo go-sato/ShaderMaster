@@ -13,11 +13,8 @@
 		Tags { "RenderType" = "Opaque" }
 		LOD 100
 
-
 		Pass
 		{
-
-
 			CGPROGRAM
 			//Vertex shader,Fragment shader宣言
 			#pragma vertex vert
@@ -131,6 +128,7 @@
 				float3 norm = mul((float3x3)UNITY_MATRIX_IT_MV,v.normal);
 				float2 offset = TransformViewToProjection(norm.xy);
 				o.vertex.xy += offset * o.vertex.z * _Outline;
+				o.vertex.z += 0.001f;
 				o.color = _OutlineColor;
 
 				//あとで書き換え

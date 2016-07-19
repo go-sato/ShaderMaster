@@ -130,7 +130,7 @@ Material:
       data:
         first:
           name: _Outline
-        second: 0.03
+        second: 0.006
     m_Colors:
       data:
         first:
