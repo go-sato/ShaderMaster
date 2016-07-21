@@ -82,8 +82,10 @@
 
 		Pass
 		{
+			//ポリゴンのどちら側をカリングするか
+			//裏返しにする
 			Cull Front
-			ZWrite On
+//			ZWrite On
 			ColorMask RGB
 			Blend SrcAlpha OneMinusSrcAlpha
 
@@ -123,12 +125,13 @@
 			{
 				v2f o;
 				//三角形メッシュ頂点の座標変換
-				//mulは乗算
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+
+				//謎
 				float3 norm = mul((float3x3)UNITY_MATRIX_IT_MV,v.normal);
 				float2 offset = TransformViewToProjection(norm.xy);
 				o.vertex.xy += offset * o.vertex.z * _Outline;
-				o.vertex.z += 0.001f;
+
 				o.color = _OutlineColor;
 
 				//あとで書き換え
