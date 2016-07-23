@@ -41,7 +41,7 @@
 				//あとで書き換え
 //				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				//テクスチャ用のuv座標を作成
-				o.uv.x = v.uv.x;
+				o.uv.x = v.uv.x*2;
 				o.uv.y = v.uv.y;
 
 				o.color = v.color;
@@ -50,9 +50,9 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				fixed3 col = abs(0.1 / (sin(2.0 * 3.14 * i.uv.x.x) * 0.5 + 0.5 - i.uv.y));
-//				return fixed4(i.color, 1);
-//				i.color = (0,col,0);
+				fixed3 col = (0,0,0);
+				//sin波の模様
+				col.y = abs(0.1 / (sin(2.0 * 3.14 * i.uv.x + _Time * 100) * 0.5 + 0.5 - i.uv.y));
 				return fixed4(col,1.0f);
 			}
 			ENDCG
