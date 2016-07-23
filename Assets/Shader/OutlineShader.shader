@@ -16,11 +16,8 @@
 		Pass
 		{
 			//ポリゴンのどちら側をカリングするか
-			//裏返しにする
+			//裏返しにするのここ
 			Cull Front
-//			ZWrite On
-			ColorMask RGB
-			Blend SrcAlpha OneMinusSrcAlpha
 
 			CGPROGRAM
 			//Vertex shader,Fragment shader宣言
@@ -30,16 +27,12 @@
 			//便利マクロをインクルード
 			#include "UnityCG.cginc"
 
-			sampler2D _MainTex;
-			float4 _MainTex_ST;
-
 			//unityから送られてくる頂点の情報
 			//型 変数名 : セマンティクス
 			struct appdata
 			{
 				float4 vertex : POSITION; //頂点座標
 				fixed3 color : COLOR0; //頂点カラー
-				float2 uv : TEXCOORD0;
 				float3 normal : NORMAL;
 			};
 
@@ -47,7 +40,6 @@
 			{
 				float4 vertex : SV_POSITION;
 				fixed3 color : COLOR0;
-				float2 uv : TEXCOORD0;
 			};
 
 			uniform float _Outline;
@@ -60,8 +52,14 @@
 				//三角形メッシュ頂点の座標変換
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 
-//				float3 norm = mul((float3x3)UNITY_MATRIX_IT_MV,v.normal);
-				float2 offset = TransformViewToProjection(v.normal.xy);
+				//モデルビュー転置行列の逆行列
+				float3 norm = mul((float3x3)UNITY_MATRIX_IT_MV,v.normal);
+
+				//うまくいく
+				float2 offset = TransformViewToProjection(norm.xy);
+				//カメラの向きによってうまくいかない
+//				float2 offset = TransformViewToProjection(v.normal.xy);
+
 				o.vertex.xy += offset * o.vertex.z * _Outline;
 
 				o.color = _OutlineColor;
