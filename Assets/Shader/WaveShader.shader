@@ -1,7 +1,8 @@
 ﻿Shader "Custom/Unlit/WaveShader"
 {
 	Properties{
-		_MainTex("Texture", 2D) = "white"{}
+		_MainTex("MainTexture", 2D) = "white"{}
+		_SubTex("SubTexture", 2D) = "white"{}
 	}
 
 	SubShader
@@ -19,6 +20,7 @@
 			#include "UnityCG.cginc"
 
 			sampler2D _MainTex;
+			sampler2D _SubTex;
 
 			//unityから送られてくる頂点の情報
 			//型 変数名 : セマンティクス
@@ -59,8 +61,8 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				fixed4 texCol = tex2D(_MainTex, i.uv);
-				fixed4 col = fixed4(i.color, 1) * texCol;
+				fixed4 mainTexCol = tex2D(_MainTex, i.uv);
+				fixed4 col = fixed4(i.color, 1.0) * mainTexCol;
 				return col;
 			}
 			ENDCG
