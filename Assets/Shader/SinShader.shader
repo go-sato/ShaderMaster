@@ -1,9 +1,5 @@
-﻿Shader "Custom/Unlit/WaveShader"
+﻿Shader "Custom/Unlit/SinShader"
 {
-	Properties{
-		_MainTex("Texture", 2D) = "white"{}
-	}
-
 	SubShader
 	{
 		Tags { "RenderType" = "Opaque" }
@@ -18,7 +14,6 @@
 
 			#include "UnityCG.cginc"
 
-			sampler2D _MainTex;
 
 			//unityから送られてくる頂点の情報
 			//型 変数名 : セマンティクス
@@ -40,18 +35,14 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-		
-				o.vertex = mul(_Object2World, v.vertex);
-
-				float phase = _Time * 50.0;
-				float offset = (o.vertex.z * 0.1);
-
-				o.vertex.y = sin(phase + offset) * 2.0;
-				o.vertex = mul(_World2Object, o.vertex);
-				o.vertex = mul(UNITY_MATRIX_MVP, o.vertex);
-
-				o.uv.x = v.uv.x + _Time;
-				o.uv.y = v.uv.y + _Time / 2;
+				//三角形メッシュ頂点の座標変換
+				//mulは乗算
+				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				//あとで書き換え
+//				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				//テクスチャ用のuv座標を作成
+				o.uv.x = v.uv.x*2;
+				o.uv.y = v.uv.y;
 
 				o.color = v.color;
 				return o;
@@ -59,9 +50,10 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				fixed4 texCol = tex2D(_MainTex, i.uv);
-				fixed4 col = fixed4(i.color, 1) * texCol;
-				return col;
+				fixed3 col = (0,0,0);
+				//sin波の模様
+				col.y = abs(0.1 / (sin(2.0 * 3.14 * i.uv.x + _Time * 100) * 0.5 + 0.5 - i.uv.y));
+				return fixed4(col,1.0f);
 			}
 			ENDCG
 		}
