@@ -97,7 +97,7 @@ GameObject:
   - 64: {fileID: 4231064}
   - 23: {fileID: 4231063}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Sea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

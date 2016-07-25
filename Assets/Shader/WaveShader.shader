@@ -68,18 +68,12 @@
 				return o;
 			}
 
-//			void surf (Input IN, inout SurfaceOutput o){
-//				fixed4 mainCol = tex2D(_MainTex, IN.uv_MainTex);
-//				fixed4 texTwoCol = tex2D(_SubTex, IN.uv_MainTex);
-//				fixed4 output = lerp(mainCol, texTwoCol, _Blend1)
-//				o.Albedo = output.rgb;
-//				o.Alpha = output.a;
-//			}
-
 			fixed4 frag(v2f i) : SV_Target
 			{
 				fixed4 mainTexCol = tex2D(_MainTex, i.uv);
-				fixed4 col = fixed4(i.color, 1.0) * mainTexCol;
+				fixed4 subTexCol = tex2D(_SubTex, i.uv);
+				fixed4 mixTexCol = mainTexCol * subTexCol;
+				fixed4 col = fixed4(i.color, 1.0) * mixTexCol;
 				return col;
 			}
 			ENDCG
