@@ -7,7 +7,11 @@
 
 	SubShader
 	{
-		Tags { "RenderType" = "Opaque" }
+		Tags { 
+			"RenderType" = "Transparent" 
+			"Queue" = "Transparent"
+		}
+		Blend SrcAlpha OneMinusSrcAlpha
 		LOD 100
 
 		Pass
@@ -21,6 +25,7 @@
 
 			sampler2D _MainTex;
 			sampler2D _SubTex;
+			float _Blend1;
 
 			//unityから送られてくる頂点の情報
 			//型 変数名 : セマンティクス
@@ -36,6 +41,10 @@
 				float4 vertex : SV_POSITION;
 				fixed3 color : COLOR0;
 				float2 uv : TEXCOORD0;
+			};
+
+			struct Input{
+				float2 uv_MainTex;
 			};
 
 			//メッシュの頂点座標を加工
@@ -58,6 +67,14 @@
 				o.color = v.color;
 				return o;
 			}
+
+//			void surf (Input IN, inout SurfaceOutput o){
+//				fixed4 mainCol = tex2D(_MainTex, IN.uv_MainTex);
+//				fixed4 texTwoCol = tex2D(_SubTex, IN.uv_MainTex);
+//				fixed4 output = lerp(mainCol, texTwoCol, _Blend1)
+//				o.Albedo = output.rgb;
+//				o.Alpha = output.a;
+//			}
 
 			fixed4 frag(v2f i) : SV_Target
 			{
