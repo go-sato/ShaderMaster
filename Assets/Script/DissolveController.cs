@@ -10,6 +10,6 @@ public class DissolveController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		GetComponent<Renderer> ().material.SetFloat ("_Threshhold", Mathf.Sin (Time.time / 3));
+		GetComponent<Renderer> ().material.SetFloat ("_Threshhold", Mathf.Abs(Mathf.Sin (Time.time / 3)) * 0.5f + 0.2f);
 	}
 }

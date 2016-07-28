@@ -139,32 +139,27 @@
 				return o;
 			}
 
-			 fixed4 SampleSpriteTexture (float2 uv)
-            {
-                fixed4 color = tex2D (_MainTex, uv);
- 
-#if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
-                if (_AlphaSplitEnabled)
-                    color.a = tex2D (_AlphaTex, uv).r;
-#endif //UNITY_TEXTURE_ALPHASPLIT_ALLOWED
- 
-                return color;
-            }
-
 			fixed4 frag(v2f i) : SV_Target
             {
-            	float val = tex2D(_DissolveTex, i.uv).rgb - _Threshhold;
-            	if(val <= -0.02) clip(val);
+
+            	//以下Dissolve処理
+            	float val = tex2D(_DissolveTex, i.uv);
+            	val = tex2D(_DissolveTex, i.uv).rgb - _Threshhold;
+
+//            	if(val <= -0.02) {
+//            		clip(val);
+//            	}
+
             	if(val <= 0){
             		val += 0.02;
-            		fixed4 c = SampleSpriteTexture (i.uv) * i.color;
-            		float a = lerp(0,c.a,50*val);
+            		fixed4 c = tex2D(_MainTex, i.uv) * i.color;
+            		float a = lerp(0, c.a, 50*val);
             		c.a = a;
             		c.rgb *= c.a;
             		return c;
             	}
 
-                fixed4 c = SampleSpriteTexture (i.uv) * i.color;
+                fixed4 c = tex2D(_MainTex, i.uv) * i.color;
                 c.rgb *= c.a;
                 return c;
             }
