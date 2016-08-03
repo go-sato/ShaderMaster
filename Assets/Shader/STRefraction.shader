@@ -9,8 +9,8 @@ Shader "STShader/Refraction"
 		_Fresnel ("Fresnel", Range(0, 1)) = 0.5
 		_FresnelColor ("Fresnel Color", Color) = (1,1,1,1)
 		_Shininess ("Specular Shininess", Range(0, 1)) = 0.0
-		_Refraction ("Refraction", Range(0, 1)) = 0.5
-		_Reflection ("Reflection", Range(0, 1)) = 0.5
+		_Refraction ("Refraction", Range(0, 1)) = 0.5 //屈折
+		_Reflection ("Reflection", Range(0, 1)) = 0.5 //反射
 		_MainTex ("Texture", 2D) = "white" {}
 		_BumpMap ("Normalmap", 2D) = "bump" {}
 		_Cube("Reflection Map", Cube) = "" {}
@@ -47,7 +47,7 @@ Shader "STShader/Refraction"
 				float4 vertex : POSITION;
 				float2 uv : TEXCOORD0;
 				float3 normal : NORMAL;
-				float4 tangent : TANGENT;
+				float4 tangent : TANGENT; //接戦
 			};
 
 			struct v_output
@@ -67,6 +67,11 @@ Shader "STShader/Refraction"
 
 			float fresnel(float3 V, float3 N, float P)
 			{	
+				//saturate:0~1の範囲にクランプする
+				//dot:2つのベクトルの内積を返す
+				//内積が大きければ大きいほど輝度が小さくなる
+				//指数大きければ大きいほどフレネル反射の端が外側に寄る
+				//ピクセル一つずつやってるの？？
 				return pow(1 - saturate(dot(V,N)), P);
 			}
 			
