@@ -1,4 +1,7 @@
-﻿Shader "Custom/Unlit/WaveShader"
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+Shader "Custom/Unlit/WaveShader"
 {
 	Properties{
 		_MainTex("MainTexture", 2D) = "white"{}
@@ -52,13 +55,13 @@
 			{
 				v2f o;
 		
-				o.vertex = mul(_Object2World, v.vertex);
+				o.vertex = mul(unity_ObjectToWorld, v.vertex);
 
 				float phase = _Time * 50.0;
 				float offset = (o.vertex.z * 0.1);
 
 				o.vertex.y = sin(phase + offset) * 2.0;
-				o.vertex = mul(_World2Object, o.vertex);
+				o.vertex = mul(unity_WorldToObject, o.vertex);
 				o.vertex = mul(UNITY_MATRIX_MVP, o.vertex);
 
 				o.uv.x = v.uv.x + _Time;

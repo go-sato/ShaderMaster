@@ -1,4 +1,7 @@
-﻿Shader "Custom/Unlit/WaveShader2"
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+Shader "Custom/Unlit/WaveShader2"
 {
 	Properties{
 		[PerRenderData]_MainTex("MainTexture", 2D) = "white"{}
@@ -57,13 +60,13 @@
 			{
 				v2f o;
 		
-				o.vertex = mul(_Object2World, v.vertex);
+				o.vertex = mul(unity_ObjectToWorld, v.vertex);
 
 				float phase = _Time * 50.0;
 				float offset = (o.vertex.z * 0.1);
 
 				o.vertex.y = sin(phase + offset) * 2.0;
-				o.vertex = mul(_World2Object, o.vertex);
+				o.vertex = mul(unity_WorldToObject, o.vertex);
 				o.vertex = mul(UNITY_MATRIX_MVP, o.vertex);
 
 				o.uv.x = v.uv.x + _Time;
@@ -121,13 +124,13 @@
 			{
 				v2f o;
 		
-				o.vertex = mul(_Object2World, v.vertex);
+				o.vertex = mul(unity_ObjectToWorld, v.vertex);
 
 				float phase = _Time * 50.0;
 				float offset = (o.vertex.z * 0.1);
 
 				o.vertex.y = sin(phase + offset) * 2.0;
-				o.vertex = mul(_World2Object, o.vertex);
+				o.vertex = mul(unity_WorldToObject, o.vertex);
 				o.vertex = mul(UNITY_MATRIX_MVP, o.vertex);
 
 				o.screenpos = ComputeScreenPos(o.vertex);
@@ -150,18 +153,18 @@
 //            		clip(val);
 //            	}
 
-            	if(val <= 0){
-            		val += 0.02;
+//            	if(val <= 0){
+//            		val += 0.02;
             		fixed4 c = tex2D(_MainTex, i.uv) * i.color;
             		float a = lerp(0, c.a, 50*val);
             		c.a = a;
             		c.rgb *= c.a;
             		return c;
-            	}
+//            	}
 
-                fixed4 c = tex2D(_MainTex, i.uv) * i.color;
-                c.rgb *= c.a;
-                return c;
+//                fixed4 c = tex2D(_MainTex, i.uv) * i.color;
+//                c.rgb *= c.a;
+//                return c;
             }
 			ENDCG
 		}
